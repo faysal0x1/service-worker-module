@@ -1,0 +1,11 @@
+{
+    "name": "ServiceWorker",
+    "alias": "serviceworker",
+    "description": "Provides the service worker runtime, config publishing, and reusable frontend helpers.",
+    "keywords": ["service-worker", "pwa", "cache"],
+    "priority": 0,
+    "providers": [
+        "App\\Modules\\ServiceWorker\\Providers\\ServiceWorkerServiceProvider"
+    ],
+    "files": []
+}
