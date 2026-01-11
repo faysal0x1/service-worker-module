@@ -2,7 +2,7 @@
     "name": "faysal0x1/service-worker-module",
     "description": "Reusable service worker + frontend cache module for Laravel (nwidart).",
     "type": "laravel-module",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "license": "MIT",
     "keywords": [
         "laravel",
@@ -23,7 +23,11 @@
     "autoload": {
         "psr-4": {
             "App\\Modules\\ServiceWorker\\": "./"
-        }
+        },
+        "classmap": [
+            "database/seeders",
+            "database/factories"
+        ]
     },
     "extra": {
         "module-dir": "Modules"
