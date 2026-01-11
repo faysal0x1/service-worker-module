@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Modules\ServiceWorker\Providers;
 
 use Illuminate\Support\Facades\File;
@@ -34,13 +33,13 @@ class ServiceWorkerServiceProvider extends ServiceProvider
         ], 'serviceworker-config');
 
         $this->publishes([
-            module_path($this->moduleName, 'Resources/js/utils/serviceWorker.js')   => resource_path('js/utils/serviceWorker.js'),
+            module_path($this->moduleName, 'Resources/js/utils/serviceWorker.js')  => resource_path('js/utils/serviceWorker.js'),
             module_path($this->moduleName, 'Resources/js/config/serviceWorker.js') => resource_path('js/config/serviceWorker.js'),
         ], 'serviceworker-frontend');
 
         $this->publishes([
             module_path($this->moduleName, 'Resources/public/sw.bootstrap.js') => public_path('sw.js'),
-            module_path($this->moduleName, 'Resources/public/sw.js')          => public_path('sw.module.js'),
+            module_path($this->moduleName, 'Resources/public/sw.js')           => public_path('sw.module.js'),
         ], 'serviceworker-assets');
 
         $this->publishes([
