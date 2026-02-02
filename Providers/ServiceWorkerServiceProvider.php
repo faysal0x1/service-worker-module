@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Modules\ServiceWorker\Providers;
 
 use Illuminate\Support\Facades\File;
@@ -12,15 +13,21 @@ class ServiceWorkerServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->mergeConfigFrom(module_path($this->moduleName, 'Config/service-worker.php'), 'service-worker');
-        $this->mergeConfigFrom(module_path($this->moduleName, 'Config/frontend-cache.php'), 'frontend-cache');
+        // Ensure cache service is available before merging config files
+        // This prevents Laravel from trying to resolve 'cache' as a class name
+        // if (!$this->app->bound('cache')) {
+        //     $this->app->register(\Illuminate\Cache\CacheServiceProvider::class);
+        // }
+
+        $this->mergeConfigFrom(__DIR__ . '/../Config/service-worker.php', 'service-worker');
+        $this->mergeConfigFrom(__DIR__ . '/../Config/frontend-cache.php', 'frontend-cache');
 
         $this->app->register(EventServiceProvider::class);
     }
 
     public function boot(): void
     {
-        $this->loadRoutesFrom(module_path($this->moduleName, 'routes/web.php'));
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->registerPublishables();
         $this->ensureBootstrapFilesExist();
     }
@@ -28,34 +35,34 @@ class ServiceWorkerServiceProvider extends ServiceProvider
     protected function registerPublishables(): void
     {
         $this->publishes([
-            module_path($this->moduleName, 'Config/service-worker.php') => config_path('service-worker.php'),
-            module_path($this->moduleName, 'Config/frontend-cache.php') => config_path('frontend-cache.php'),
+            __DIR__ . '/../Config/service-worker.php' => config_path('service-worker.php'),
+            __DIR__ . '/../Config/frontend-cache.php' => config_path('frontend-cache.php'),
         ], 'serviceworker-config');
 
         $this->publishes([
-            module_path($this->moduleName, 'Resources/js/utils/serviceWorker.js')  => resource_path('js/utils/serviceWorker.js'),
-            module_path($this->moduleName, 'Resources/js/config/serviceWorker.js') => resource_path('js/config/serviceWorker.js'),
+            __DIR__ . '/../Resources/js/utils/serviceWorker.js'  => resource_path('js/utils/serviceWorker.js'),
+            __DIR__ . '/../Resources/js/config/serviceWorker.js' => resource_path('js/config/serviceWorker.js'),
         ], 'serviceworker-frontend');
 
         $this->publishes([
-            module_path($this->moduleName, 'Resources/public/sw.bootstrap.js') => public_path('sw.js'),
-            module_path($this->moduleName, 'Resources/public/sw.js')           => public_path('sw.module.js'),
+            __DIR__ . '/../Resources/public/sw.bootstrap.js' => public_path('sw.js'),
+            __DIR__ . '/../Resources/public/sw.js'           => public_path('sw.module.js'),
         ], 'serviceworker-assets');
 
         $this->publishes([
-            module_path($this->moduleName, 'Resources/docs/SERVICE_WORKER_CONFIG.md') => base_path('SERVICE_WORKER_CONFIG.md'),
+            __DIR__ . '/../Resources/docs/SERVICE_WORKER_CONFIG.md' => base_path('SERVICE_WORKER_CONFIG.md'),
         ], 'serviceworker-docs');
     }
 
     protected function ensureBootstrapFilesExist(): void
     {
         $this->copyIfMissing(
-            module_path($this->moduleName, 'Resources/docs/SERVICE_WORKER_CONFIG.md'),
+            __DIR__ . '/../Resources/docs/SERVICE_WORKER_CONFIG.md',
             base_path('SERVICE_WORKER_CONFIG.md')
         );
 
         $this->copyIfMissing(
-            module_path($this->moduleName, 'Resources/public/sw.bootstrap.js'),
+            __DIR__ . '/../Resources/public/sw.bootstrap.js',
             public_path('sw.js')
         );
     }
